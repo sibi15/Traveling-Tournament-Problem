@@ -198,6 +198,15 @@ class TTPExactSolverComplete:
                 model.Add(sum(home[i,r+k] for k in range(U+1)) <= U)
                 model.Add(sum(away[i,r+k] for k in range(U+1)) <= U)
 
+            if L > 1:
+                for r in range(self.num_rounds - L + 1):
+                    # If starting a home streak, must continue for at least L rounds
+                    if r > 0:
+                        model.Add(home[i,r] - home[i,r-1] <= sum(home[i,r+k] for k in range(min(L, self.num_rounds-r))) / L)
+                    # Similar for away streaks
+                    if r > 0:
+                        model.Add(away[i,r] - away[i,r-1] <= sum(away[i,r+k] for k in range(min(L, self.num_rounds-r))) / L)
+
         # 5) No repeaters (strengthened)
         for i in range(self.n_teams):
             for k in range(self.n_teams):
@@ -285,7 +294,7 @@ class TTPExactSolverComplete:
                 for away_team, home_team in schedule[round_num]:
                     print(f' ScheduledMatch away="{away_team}" home="{home_team}" slot="{round_num}"')
         
-    def export_schedule_to_csv(self, schedule, filename="ortools_complete_schedule.csv"):
+    def export_schedule_to_csv(self, schedule, filename):
         """Export schedule to CSV"""
         with open(filename, 'w', newline='', encoding='utf-8') as f:
             writer = csv.writer(f)
@@ -315,4 +324,4 @@ if __name__ == "__main__":
     if result['status'] in ['OPTIMAL', 'FEASIBLE']:
         # Export XML and CSV
         solver.print_xml_format(result['schedule'])
-        #solver.export_schedule_to_csv(result['schedule'])
+        solver.export_schedule_to_csv(result['schedule'], 'schedule_NL6.csv')

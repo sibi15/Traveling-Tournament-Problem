@@ -5,12 +5,11 @@ import time
 from collections import defaultdict
 
 class TTPGeneticSolver:
-    def __init__(self, filename, population_size=50, generations=250, mutation_rate=0.25, max_time_sec=150):
+    def __init__(self, filename, population_size=50, generations=250, mutation_rate=0.25):
         self.filename = filename
         self.population_size = population_size
         self.generations = generations
         self.mutation_rate = mutation_rate
-        self.max_time_sec = max_time_sec
 
         self.teams, self.distances, self.L, self.U = self.load_instance(filename)
         self.n_teams = len(self.teams)
@@ -177,9 +176,6 @@ class TTPGeneticSolver:
                 print(f"Generation {gen+1}: New best found! Travel Cost: {best_cost}")
             elif gen % 10 == 0:
                 print(f"Generation {gen+1}: Best Travel Cost: {best_cost}")
-            if (time.time() - start_time) > self.max_time_sec:
-                print(f"Time limit reached at generation {gen+1}")
-                break
         return best_solution, best_cost
 
     def print_schedule(self, schedule):
@@ -223,7 +219,8 @@ class TTPGeneticSolver:
         print("\n")
 
 if __name__ == "__main__":
-    solver = TTPGeneticSolver("Data/NL4.xml", population_size=50, generations=150, max_time_sec=150)
+    start=time.perf_counter()
+    solver = TTPGeneticSolver("Data/NL4.xml", population_size=50, generations=150)
     solution, cost = solver.solve()
     print("\n" + "="*70)
     solver.print_schedule(solution)
@@ -233,3 +230,5 @@ if __name__ == "__main__":
         print("✓ Schedule is VALID\n")
     else:
         print("✗ Schedule is INVALID")
+    end = time.perf_counter()
+    print(f"\nTime taken: {end - start:.2f} seconds\n")
