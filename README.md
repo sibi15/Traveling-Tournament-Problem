@@ -19,4 +19,4 @@ An optimization project comparing Constraint Programming and Genetic Algorithms 
 - Achieved optimal solutions for small instances; GA solved 10-team problems in <3 seconds
 
 ### Outcome:
-Demonstrated trade-offs between solution methods—CP-SAT provided proven optimality for small instances while Genetic Algorithm delivered practical scalability for larger problems, solving them 1000x faster with competitive solution quality.
+Demonstrated trade-offs between solution methods, CP-SAT having provided proven optimality for small instances while Genetic Algorithm delivered practical scalability for larger problems, solving them 1000x faster with competitive solution quality.
